@@ -84,17 +84,27 @@ public class RecaptchaUsernamePasswordForm extends UsernamePasswordForm implemen
 
 			success = validateRecaptcha(context, success, captcha, secret);
 		}
+
 		if (success) {
-			super.action(context);
+			if(!super.validateForm(context, formData)){
+				authenticate(context);
+				return;
+			}
+			context.success();
 		} else {
-			errors.add(new FormMessage(null, Messages.RECAPTCHA_FAILED));
+//			errors.add(new FormMessage(null, Messages.RECAPTCHA_FAILED));
 			formData.remove(G_RECAPTCHA_RESPONSE);
+			context.getEvent().error(Messages.RECAPTCHA_FAILED);
+			Response challengeResponse = context.form().setError(Messages.RECAPTCHA_FAILED).createLoginUsernamePassword();
+			context.forceChallenge(challengeResponse);
+			authenticate(context);
+
+
 //			 context.error(Errors.INVALID_REGISTRATION);
 			// context.validationError(formData, errors);
 			// context.excludeOtherErrors();
 			return;
 		}
-
 		if (logger.isDebugEnabled()) {
 			logger.debug("action(AuthenticationFlowContext) - end");
 		}
