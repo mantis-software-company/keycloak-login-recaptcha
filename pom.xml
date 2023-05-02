@@ -67,7 +67,7 @@
 
     <groupId>tr.com.mantis.keycloak</groupId>
     <artifactId>recaptcha-login-provider</artifactId>
-    <version>15.0.1</version>
+    <version>20.0.3</version>
     <packaging>jar</packaging>
     
     <dependencies>
